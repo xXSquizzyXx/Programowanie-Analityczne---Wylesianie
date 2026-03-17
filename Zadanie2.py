@@ -20,21 +20,19 @@ for file in multi_files:
     path = f'images_geotiff/{file}'
     try:
         with rasterio.open(path) as src:
-            # Wczytywanie kanałów: Red (3) i NIR (4) [cite: 24]
             red = src.read(3).astype('float32')
             nir = src.read(4).astype('float32')
             
-            # Obliczanie NDVI [cite: 24, 33]
-            # Wzór: (NIR - RED) / (NIR + RED)
+            # Obliczanie NDVI 
             denom = nir + red
             ndvi = np.divide((nir - red), denom, out=np.zeros_like(nir), where=denom!=0)
             ndvi_maps.append(ndvi)
             
-            # Generowanie obrazu binarnego (klasyfikacja) [cite: 28]
+            # Generowanie obrazu binarnego (klasyfikacja)
             binary = (ndvi > threshold_ndvi).astype(np.uint8)
             ndvi_binary.append(binary)
             
-            # Obliczanie procentu zalesienia [cite: 29]
+            # Obliczanie procentu zalesienia 
             perc = (np.sum(binary) / binary.size) * 100
             forest_percentages.append(perc)
             print(f"Przetworzono {file}: {perc:.2f}% powierzchni roślinnej")
@@ -42,7 +40,7 @@ for file in multi_files:
     except Exception as e:
         print(f"❌ Błąd przy pliku {file}: {e}")
 
-# 2. Wizualizacja map NDVI [cite: 27, 30]
+# 2. Wizualizacja map NDVI
 def plot_ndvi_results(data, title, cmap='RdYlGn'):
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
     fig.suptitle(title, fontsize=16)
@@ -56,7 +54,7 @@ def plot_ndvi_results(data, title, cmap='RdYlGn'):
     fig.colorbar(im, cax=cbar_ax)
     plt.show()
 
-# 3. Wizualizacja obrazów binarnych [cite: 28, 30]
+# 3. Wizualizacja obrazów binarnych 
 def plot_binary_results(data, title):
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
     fig.suptitle(title, fontsize=16)
@@ -71,7 +69,7 @@ def plot_binary_results(data, title):
 plot_ndvi_results(ndvi_maps, "Mapy wskaźnika NDVI")
 plot_binary_results(ndvi_binary, "Obrazy binarne (Roślinność vs Brak)")
 
-# 4. Wykres słupkowy zmian zalesienia [cite: 29, 30]
+# 4. Wykres słupkowy zmian zalesienia 
 plt.figure(figsize=(10, 6))
 bars = plt.bar(years, forest_percentages, color='forestgreen', edgecolor='black')
 plt.title("Analiza wylesiania na podstawie wskaźnika NDVI", fontsize=14)
