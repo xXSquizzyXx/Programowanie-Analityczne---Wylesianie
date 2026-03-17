@@ -54,7 +54,7 @@ def plot_2x2(data, title, cmap=None, vmin=None, vmax=None):
     plt.subplots_adjust(left=0.05, bottom=0.05, right=0.85, top=0.9, wspace=0.3, hspace=0.3)
         
     if cmap and vmin is not None:
-        # Przesunięcie colorbar, żeby nie nachodził na napisy
+        # Przesunięcie colorbar
         cbar_ax = fig.add_axes([0.88, 0.15, 0.03, 0.7]) 
         fig.colorbar(im, cax=cbar_ax)
         
