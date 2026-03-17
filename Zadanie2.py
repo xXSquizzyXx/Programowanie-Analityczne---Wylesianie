@@ -2,7 +2,7 @@ import rasterio
 import numpy as np
 import matplotlib.pyplot as plt
 
-# 1. Konfiguracja na podstawie Twojego folderu
+# 1. Konfiguracja 
 years = ['1985', '1993', '2001', '2011']
  
 multi_files = ['1985api.tif', '1993api.tif', '2001api.tif', '2011api.tif']
